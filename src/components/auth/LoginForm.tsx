@@ -23,7 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { User } from "@/types/api/user";
+import { User, UserRole } from "@/types/api/user";
 
 const loginSchema = z.object({
   login: z.string().min(1, "Username or email is required"),
@@ -37,7 +37,7 @@ export function LoginForm() {
   const { setAuth } = useAuthStore();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { login: "superadmin", password: "SuperAdmin@123" },
+    defaultValues: { login: "superadmin@gmail.com", password: "yngWIE500" },
   });
 
   const loginMutation = useMutation({
@@ -55,8 +55,18 @@ export function LoginForm() {
       const user = meResponse.data.data;
       const role = user.userRole.toLowerCase();
       setAuth(user, role, accessToken);
+
+      let fullName = "";
+
+      if (user.userRole === UserRole.ADMIN)
+        fullName = user.adminProfile?.fullName ?? user.username;
+      else if (user.userRole === UserRole.STUDENT)
+        fullName = user.studentProfile?.fullName ?? user.username;
+      else if (user.userRole === UserRole.TEACHER)
+        fullName = user.teacherProfile?.fullName ?? user.username;
+
       toast.success("Login Successful", {
-        description: `Welcome back, ${user.username}!`,
+        description: `Welcome back, ${fullName}!`,
       });
 
       router.push(`/${role}`);

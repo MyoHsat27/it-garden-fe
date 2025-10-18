@@ -6,7 +6,7 @@ import {
   ChevronDown,
   User,
   LogOut,
-  Settings,
+  MessageCircle,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -18,6 +18,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useAuthStore } from "@/stores/auth.store";
 import { useRouter } from "next/navigation";
+import { UserRole } from "@/types/api/user";
 
 interface NavbarProps {
   openSidebar: () => void;
@@ -26,6 +27,17 @@ interface NavbarProps {
 export function Navbar({ openSidebar }: NavbarProps) {
   const { user, logout } = useAuthStore();
   const router = useRouter();
+
+  let fullName = "";
+  if (user) {
+    fullName = user.username;
+    if (user.userRole === UserRole.ADMIN)
+      fullName = user.adminProfile?.fullName ?? user.username;
+    else if (user.userRole === UserRole.STUDENT)
+      fullName = user.studentProfile?.fullName ?? user.username;
+    else if (user.userRole === UserRole.TEACHER)
+      fullName = user.teacherProfile?.fullName ?? user.username;
+  }
 
   const handleLogout = () => {
     logout();
@@ -43,10 +55,22 @@ export function Navbar({ openSidebar }: NavbarProps) {
 
       <div className="flex-1"></div>
 
-      <div className="flex items-center gap-4">
-        <div className="relative">
-          <button className="relative p-2 rounded-full hover:bg-gray-100">
+      <div className="flex items-center gap-5">
+        <div className="relative flex gap-3">
+          <button className="relative p-2 rounded-full hover:bg-gray-100 cursor-pointer">
             <Bell className="w-5 h-5" />
+            <Badge
+              variant="destructive"
+              className="absolute -top-1 -right-1 w-4 h-4 text-[10px] flex items-center justify-center"
+            >
+              3
+            </Badge>
+          </button>
+          <button
+            className="relative p-2 rounded-full hover:bg-gray-100 cursor-pointer"
+            onClick={() => router.push("/chats")}
+          >
+            <MessageCircle className="w-5 h-5" />
             <Badge
               variant="destructive"
               className="absolute -top-1 -right-1 w-4 h-4 text-[10px] flex items-center justify-center"
@@ -57,21 +81,18 @@ export function Navbar({ openSidebar }: NavbarProps) {
         </div>
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center gap-2">
+          <DropdownMenuTrigger className="flex items-center gap-2 cursor-pointer">
             <Avatar className="w-8 h-8">
-              <AvatarFallback>{user?.username?.[0]}</AvatarFallback>
+              <AvatarFallback>{fullName[0]}</AvatarFallback>
             </Avatar>
             <span className="hidden sm:block text-sm font-medium">
-              {user?.username}
+              {fullName}
             </span>
             <ChevronDown className="hidden sm:block w-4 h-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => router.push("/profile")}>
               <User /> Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => router.push("/settings")}>
-              <Settings /> Settings
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut /> Logout

@@ -3,6 +3,7 @@ import { Course } from "@/types/api/course";
 import { PaginatedResponse } from "@/types/api/pagination";
 
 interface CourseFilter {
+  studentId?: number;
   search?: string;
   page?: number;
   limit?: number;

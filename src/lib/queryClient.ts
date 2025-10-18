@@ -69,7 +69,10 @@ export const useWrite = <TData = unknown, TError = unknown>({
 
   const mutationFn = async (variables: unknown) => {
     const payload = variables || data;
-    const config = { params, headers };
+    const config = { params, headers: { ...headers } };
+    if (payload instanceof FormData) {
+      delete config.headers["Content-Type"];
+    }
     let response;
 
     switch (method) {

@@ -3,6 +3,7 @@ import { PaginatedResponse } from "@/types/api/pagination";
 import { Payment } from "@/types/api/payment";
 
 interface PaymentFilter {
+  studentId?: number;
   search?: string;
   page?: number;
   limit?: number;

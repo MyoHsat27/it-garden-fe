@@ -18,9 +18,7 @@ export const axiosApi = axios.create({
   baseURL:
     process.env.NEXT_PUBLIC_API_URL + "/api/v1" ||
     "http://localhost:3000/api/v1",
-  headers: {
-    "Content-Type": "application/json",
-  },
+
   timeout: 60000,
   withCredentials: true,
 });
@@ -28,6 +26,10 @@ export const axiosApi = axios.create({
 axiosApi.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
   if (token) config.headers.Authorization = `Bearer ${token}`;
+
+  if (!(config.data instanceof FormData)) {
+    config.headers["Content-Type"] = "application/json";
+  }
   return config;
 });
 

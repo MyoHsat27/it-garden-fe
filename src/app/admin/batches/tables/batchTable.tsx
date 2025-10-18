@@ -68,7 +68,7 @@ export function BatchTable() {
   return (
     <Card className="py-6 shadow-sm gap-3">
       <CardHeader className="flex justify-between items-center">
-        <CardTitle className="text-xl">Batchs</CardTitle>
+        <CardTitle className="text-xl">Batches</CardTitle>
         <Button
           onClick={() => {
             setSelectedBatch(null);

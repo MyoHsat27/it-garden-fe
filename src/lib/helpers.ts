@@ -51,3 +51,8 @@ export function getSpotsLeftMessage(spotsLeft: number): string {
   if (spotsLeft === 1) return "1 spot left";
   return `${spotsLeft} spots left`;
 }
+
+export function isToday(dateStr: string) {
+  const today = new Date().toISOString().split("T")[0];
+  return dateStr === today;
+}

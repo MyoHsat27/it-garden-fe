@@ -230,17 +230,6 @@ export function StudentFormDrawer({
           </span>
         )}
 
-        <Label htmlFor="address">Address</Label>
-        <Input
-          id="address"
-          placeholder="Address"
-          {...register("address")}
-          className={errors.address ? "border-red-500" : ""}
-        />
-        {errors.address && (
-          <span className="text-red-500 text-sm">{errors.address.message}</span>
-        )}
-
         <Label htmlFor="gender">Gender</Label>
         <Controller
           control={control}

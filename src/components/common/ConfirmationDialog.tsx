@@ -13,6 +13,7 @@ interface ConfirmationDialogProps {
   title: string;
   description: string;
   open: boolean;
+  confirmButtonDisable?: boolean;
   confirmText?: string;
   confirmButtonVariant?:
     | "link"
@@ -30,6 +31,7 @@ export function ConfirmationDialog({
   description,
   open,
   confirmText,
+  confirmButtonDisable = false,
   confirmButtonVariant,
   onOpenChange,
   onConfirm,
@@ -41,13 +43,14 @@ export function ConfirmationDialog({
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
 
-        <p className="mt-2">{description}</p>
+        <p className="mt-2 whitespace-pre-line">{description}</p>
 
         <DialogFooter className="mt-4 flex justify-end gap-2">
           <Button variant={"outline"} onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
           <Button
+            disabled={confirmButtonDisable}
             variant={confirmButtonVariant ?? "default"}
             onClick={() => {
               onConfirm();

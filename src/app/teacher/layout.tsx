@@ -4,7 +4,7 @@ import { ReactNode, useState } from "react";
 import { Navbar } from "@/components/common/Navbar";
 import { Menu } from "@/components/common/Menu";
 import Image from "next/image";
-import { X, Menu as MenuIcon } from "lucide-react";
+import { X } from "lucide-react";
 
 export default function TeacherLayout({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);

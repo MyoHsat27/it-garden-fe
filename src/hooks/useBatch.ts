@@ -3,6 +3,8 @@ import { Batch } from "@/types/api/batch";
 import { PaginatedResponse } from "@/types/api/pagination";
 
 interface BatchFilter {
+  teacherId?: number;
+  studentId?: number;
   search?: string;
   page?: number;
   limit?: number;
