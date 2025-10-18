@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Dialog,
   DialogContent,
@@ -17,13 +17,6 @@ import { Label } from "@/components/ui/label";
 import { handleFormError } from "@/lib/helpers";
 import { TimeSlot } from "@/types/api/timeSlot";
 import { useCreateTimeSlot, useUpdateTimeSlot } from "@/hooks/useTimeSlot";
-import {
-  SelectTrigger,
-  SelectValue,
-  Select,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 
 interface TimeSlotFormDialogProps {
   timeSlot?: TimeSlot;
@@ -31,27 +24,44 @@ interface TimeSlotFormDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const timeSlotSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  dayOfWeek: z
-    .number()
-    .min(0, "Day must be between 0 and 6")
-    .max(6, "Day must be between 0 and 6"),
-  startTime: z.string().min(1, "Start time is required"),
-  endTime: z.string().min(1, "End time is required"),
-});
+const timeSlotSchema = z
+  .object({
+    name: z.string().min(1, "Name is required"),
+    startTime: z.string().min(1, "Start time is required"),
+    endTime: z.string().min(1, "End time is required"),
+  })
+  .refine(
+    (data) => {
+      const [startH, startM] = data.startTime.split(":").map(Number);
+      const [endH, endM] = data.endTime.split(":").map(Number);
+
+      const startMinutes = startH * 60 + startM;
+      const endMinutes = endH * 60 + endM;
+
+      if (startMinutes >= endMinutes) return false;
+
+      return endMinutes - startMinutes <= 360;
+    },
+    {
+      message:
+        "Start time must be before end time and duration cannot exceed 6 hours",
+      path: ["endTime"],
+    }
+  )
+  .refine(
+    (data) => {
+      const [startH] = data.startTime.split(":").map(Number);
+      const [endH] = data.endTime.split(":").map(Number);
+
+      return startH >= 8 && endH <= 18;
+    },
+    {
+      message: "Time slots must be between 08:00 AM and 06:00 PM",
+      path: ["startTime"],
+    }
+  );
 
 type TimeSlotFormValues = z.infer<typeof timeSlotSchema>;
-
-const days = [
-  { value: 0, label: "Sunday" },
-  { value: 1, label: "Monday" },
-  { value: 2, label: "Tuesday" },
-  { value: 3, label: "Wednesday" },
-  { value: 4, label: "Thursday" },
-  { value: 5, label: "Friday" },
-  { value: 6, label: "Saturday" },
-];
 
 export function TimeSlotFormDialog({
   timeSlot,
@@ -75,7 +85,6 @@ export function TimeSlotFormDialog({
     resolver: zodResolver(timeSlotSchema),
     defaultValues: {
       name: "",
-      dayOfWeek: 0,
       startTime: "",
       endTime: "",
     },
@@ -85,14 +94,12 @@ export function TimeSlotFormDialog({
     if (timeSlot) {
       reset({
         name: timeSlot.name,
-        dayOfWeek: timeSlot.dayOfWeek,
         startTime: timeSlot.startTime,
         endTime: timeSlot.endTime,
       });
     } else {
       reset({
         name: "",
-        dayOfWeek: 0,
         startTime: "",
         endTime: "",
       });
@@ -141,7 +148,7 @@ export function TimeSlotFormDialog({
             )}
           </div>
 
-          <div className="flex flex-col gap-3">
+          {/* <div className="flex flex-col gap-3">
             <Label htmlFor="dayOfWeek">Day of Week</Label>
             <Controller
               name="dayOfWeek"
@@ -169,7 +176,7 @@ export function TimeSlotFormDialog({
                 {errors.dayOfWeek.message}
               </span>
             )}
-          </div>
+          </div> */}
 
           <div className="flex flex-col gap-3">
             <Label htmlFor="startTime">Start Time</Label>

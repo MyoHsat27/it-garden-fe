@@ -1,6 +1,7 @@
 import { Column } from "@/components/common/DataTable";
-import { truncateDescription } from "@/lib/helpers";
-import { Batch } from "@/types/api/batch";
+import { Badge } from "@/components/ui/badge";
+import { formatTimeAMPM, getDayOfWeek } from "@/lib/helpers";
+import { Batch, BatchStatus } from "@/types/api/batch";
 
 export const batchColumns: Column<Batch>[] = [
   { key: "id", label: "ID" },
@@ -14,6 +15,38 @@ export const batchColumns: Column<Batch>[] = [
     key: "teacher",
     label: "Instructor",
     render: (batch: Batch) => batch.teacher.fullName,
+  },
+  {
+    key: "classroom",
+    label: "Room",
+    render: (batch: Batch) => batch.classroom.name,
+  },
+  {
+    key: "timetables",
+    label: "Sessions",
+    render: (batch: Batch) => (
+      <div className="flex flex-col gap-1">
+        {batch.timetables.map((t) => (
+          <Badge variant="outline">
+            {getDayOfWeek(t.dayOfWeek)} {formatTimeAMPM(t.timeSlot.startTime)} -{" "}
+            {formatTimeAMPM(t.timeSlot.endTime)}
+          </Badge>
+        ))}
+      </div>
+    ),
+  },
+  {
+    key: "status",
+    label: "Status",
+    render: (batch: Batch) => {
+      if (batch.status === BatchStatus.ACTIVE) {
+        return <Badge variant="default">Ongoing</Badge>;
+      } else if (batch.status === BatchStatus.COMPLETED) {
+        return <Badge variant="secondary">Completed</Badge>;
+      } else {
+        return <Badge variant="outline">Start on {batch.startDate}</Badge>;
+      }
+    },
   },
   {
     key: "createdAt",

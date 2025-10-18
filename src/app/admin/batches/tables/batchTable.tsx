@@ -82,7 +82,7 @@ export function BatchTable() {
         <div className="flex justify-between items-center mb-6">
           <div className="flex gap-3">
             <Input
-              placeholder="Search Batchs..."
+              placeholder="Search batches"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="max-w-xs"

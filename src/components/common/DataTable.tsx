@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { BanknoteArrowUp, Eye, Pencil, Trash2 } from "lucide-react";
 
 export interface Column<T> {
   key: keyof T | string;
@@ -33,6 +33,7 @@ interface DataTableProps<T> {
   onEdit?: (item: T) => void;
   onView?: (item: T) => void;
   onDelete?: (item: T) => void;
+  renderActions?: (item: T) => React.ReactNode;
   page?: number;
   pageSize?: number;
   total?: number;
@@ -47,6 +48,7 @@ export function DataTable<T>({
   onEdit,
   onView,
   onDelete,
+  renderActions,
   page = 1,
   pageSize = 10,
   total = 0,
@@ -84,7 +86,9 @@ export function DataTable<T>({
             {columns.map((col) => (
               <TableHead key={col.key as string}>{col.label}</TableHead>
             ))}
-            {(onEdit || onView || onDelete) && <TableHead>Actions</TableHead>}
+            {(onEdit || onView || onDelete || renderActions) && (
+              <TableHead>Actions</TableHead>
+            )}
           </TableRow>
         </TableHeader>
 
@@ -115,7 +119,7 @@ export function DataTable<T>({
                     {col.render ? col.render(item) : (item as any)[col.key]}
                   </TableCell>
                 ))}
-                {(onEdit || onView || onDelete) && (
+                {(onEdit || onView || onDelete || renderActions) && (
                   <TableCell className="flex gap-2">
                     {onView && (
                       <Button
@@ -145,6 +149,8 @@ export function DataTable<T>({
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     )}
+
+                    {renderActions && renderActions(item)}
                   </TableCell>
                 )}
               </TableRow>

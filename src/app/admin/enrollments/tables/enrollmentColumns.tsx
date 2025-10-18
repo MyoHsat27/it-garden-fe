@@ -1,5 +1,11 @@
 import { Column } from "@/components/common/DataTable";
-import { Enrollment } from "@/types/api/enrollment";
+import { Badge } from "@/components/ui/badge";
+import { capitalize } from "@/lib/helpers";
+import {
+  Enrollment,
+  EnrollmentStatus,
+  PaymentStatus,
+} from "@/types/api/enrollment";
 
 export const enrollmentColumns: Column<Enrollment>[] = [
   { key: "id", label: "ID" },
@@ -16,14 +22,39 @@ export const enrollmentColumns: Column<Enrollment>[] = [
   {
     key: "finalFee",
     label: "Fees",
+    render: (enrollment: Enrollment) => `${enrollment.feeAmount} MMK`,
   },
   {
     key: "feeStatus",
     label: "Payment Status",
+    render: (enrollment: Enrollment) => {
+      const statusMap: Record<string, "outline" | "destructive" | "default"> = {
+        [PaymentStatus.PENDING]: "outline",
+        [PaymentStatus.OVERDUE]: "destructive",
+        [PaymentStatus.PAID]: "default",
+      };
+      const variant = statusMap[enrollment.feeStatus] || "default";
+      return (
+        <Badge variant={variant}>{capitalize(enrollment.feeStatus)}</Badge>
+      );
+    },
   },
   {
     key: "enrollmentStatus",
     label: "Enrollment Status",
+    render: (enrollment: Enrollment) => {
+      const statusMap: Record<string, "outline" | "destructive" | "default"> = {
+        [EnrollmentStatus.ACTIVE]: "default",
+        [EnrollmentStatus.COMPLETED]: "outline",
+        [EnrollmentStatus.DROPPED]: "destructive",
+      };
+      const variant = statusMap[enrollment.enrollmentStatus] || "default";
+      return (
+        <Badge variant={variant}>
+          {capitalize(enrollment.enrollmentStatus)}
+        </Badge>
+      );
+    },
   },
   {
     key: "dueDate",

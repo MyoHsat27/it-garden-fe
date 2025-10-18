@@ -3,7 +3,7 @@ import { capitalize } from "@/lib/helpers";
 import { Teacher } from "@/types/api/teacher";
 
 export const teacherColumns: Column<Teacher>[] = [
-  { key: "id", label: "ID", className: "" },
+  { key: "id", label: "ID" },
   { key: "fullName", label: "Full Name" },
   { key: "phone", label: "Phone" },
   {

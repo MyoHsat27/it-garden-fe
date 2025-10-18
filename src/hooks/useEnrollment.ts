@@ -25,6 +25,14 @@ export const useCreateEnrollment = () => {
   });
 };
 
+export const usePaidEnrollment = (enrollmentId?: number) => {
+  return useWrite<Enrollment>({
+    queryKey: ["enrollments/filtered"],
+    url: `/enrollments/${enrollmentId}/paid`,
+    method: "POST",
+  });
+};
+
 export const useUpdateEnrollment = (enrollmentId?: number) => {
   return useWrite<Enrollment>({
     queryKey: ["enrollments/filtered"],

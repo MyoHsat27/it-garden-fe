@@ -12,13 +12,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectValue,
-  SelectItem,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Classroom } from "@/types/api/classroom";
@@ -31,11 +24,12 @@ interface ClassroomFormDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const adminSchema = z.object({
+const classroomSchema = z.object({
   name: z.string().min(1, "Room Name is required"),
+  capacity: z.coerce.number().min(1, "Capacity must be at least 1"),
 });
 
-type ClassroomFormValues = z.infer<typeof adminSchema>;
+type ClassroomFormValues = z.infer<typeof classroomSchema>;
 
 export function ClassroomFormDialog({
   classroom,
@@ -54,10 +48,11 @@ export function ClassroomFormDialog({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<ClassroomFormValues>({
-    resolver: zodResolver(adminSchema),
+  } = useForm({
+    resolver: zodResolver(classroomSchema),
     defaultValues: {
       name: "",
+      capacity: undefined,
     },
   });
 
@@ -65,10 +60,12 @@ export function ClassroomFormDialog({
     if (classroom) {
       reset({
         name: classroom.name,
+        capacity: classroom.capacity,
       });
     } else {
       reset({
         name: "",
+        capacity: undefined,
       });
     }
   }, [classroom, reset]);
@@ -109,6 +106,20 @@ export function ClassroomFormDialog({
           />
           {errors.name && (
             <span className="text-red-500 text-sm">{errors.name.message}</span>
+          )}
+
+          <Label htmlFor="capacity">Capacity</Label>
+          <Input
+            id="capacity"
+            placeholder="Capacity"
+            type="number"
+            {...register("capacity")}
+            className={errors.capacity ? "border-red-500" : ""}
+          />
+          {errors.capacity && (
+            <span className="text-red-500 text-sm">
+              {errors.capacity.message}
+            </span>
           )}
 
           <DialogFooter className="mt-4 flex justify-end gap-2">

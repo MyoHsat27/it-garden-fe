@@ -8,6 +8,8 @@ import {
   CheckSquare,
   Calendar,
   Bell,
+  GraduationCap,
+  CalendarDays,
 } from "lucide-react";
 
 export interface MenuItem {
@@ -35,7 +37,7 @@ export const menuItems: MenuItem[] = [
     group: "User Management",
   },
   {
-    icon: Users,
+    icon: GraduationCap,
     label: "Teachers",
     href: "/admin/teachers",
     visible: ["admin"],
@@ -84,7 +86,7 @@ export const menuItems: MenuItem[] = [
     group: "Academic",
   },
   {
-    icon: Clipboard,
+    icon: CalendarDays,
     label: "Timetables",
     href: "/admin/timetables",
     visible: ["admin"],
@@ -99,8 +101,8 @@ export const menuItems: MenuItem[] = [
   },
   {
     icon: CheckSquare,
-    label: "Attendance Records",
-    href: "/admin/attendance-records",
+    label: "Attendance",
+    href: "/student/attendance",
     visible: ["admin"],
     group: "Academic",
   },
@@ -165,8 +167,8 @@ export const menuItems: MenuItem[] = [
   },
   {
     icon: CheckSquare,
-    label: "Attendance Records",
-    href: "/teacher/attendance-records",
+    label: "Attendance",
+    href: "/student/attendance",
     visible: ["teacher"],
     group: "Academic",
   },
@@ -216,8 +218,8 @@ export const menuItems: MenuItem[] = [
   },
   {
     icon: CheckSquare,
-    label: "Attendance Records",
-    href: "/student/attendance-records",
+    label: "Attendance",
+    href: "/student/attendance",
     visible: ["student"],
   },
   {

@@ -8,7 +8,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useEffect, useState } from "react";
-import { handleFormError } from "@/lib/helpers";
+import { getSpotsLeftMessage, handleFormError } from "@/lib/helpers";
 import {
   Enrollment,
   PaymentMethod,
@@ -220,8 +220,8 @@ export function EnrollmentFormDrawer({
                     label: `${s.fullName} - ${s.registrationNumber}`,
                   })) ?? []
                 }
-                placeholder="Select student..."
-                searchPlaceholder="Search student..."
+                placeholder="Select student"
+                searchPlaceholder="Search student"
                 emptyMessage="No student found."
                 allowUnselect={false}
               />
@@ -249,11 +249,14 @@ export function EnrollmentFormDrawer({
                 options={
                   batchesRes?.data?.map((b) => ({
                     id: b.id,
-                    label: `${b.name} - ${b.course.name}`,
+                    disabled: b.spotsLeft === 0,
+                    label: `${b.name} - ${
+                      b.course.name
+                    } - ${getSpotsLeftMessage(b.spotsLeft)}`,
                   })) ?? []
                 }
-                placeholder="Select batch..."
-                searchPlaceholder="Search batch..."
+                placeholder="Select batch"
+                searchPlaceholder="Search batch"
                 emptyMessage="No batch found."
                 allowUnselect={false}
               />

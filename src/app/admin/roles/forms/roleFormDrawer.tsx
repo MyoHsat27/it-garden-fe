@@ -160,7 +160,7 @@ export function RoleFormDrawer({
       }
     >
       <div className="flex flex-col gap-4">
-        <div>
+        <div className="flex flex-col gap-3">
           <Label htmlFor="name">Role Name</Label>
           <Input
             id="name"
@@ -173,13 +173,12 @@ export function RoleFormDrawer({
           )}
         </div>
 
-        <div className="flex flex-col gap-2">
-          {/* 5. Add the button next to the label */}
+        <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
             <Label>Permissions</Label>
             {!isLoadingPermissions && permissions.length > 0 && (
               <Button
-                type="button" // Prevent form submission
+                type="button"
                 variant="link"
                 size="sm"
                 className="p-0 h-auto"

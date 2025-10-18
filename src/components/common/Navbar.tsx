@@ -1,6 +1,13 @@
 "use client";
 
-import { Bell, Menu as MenuIcon, ChevronDown } from "lucide-react";
+import {
+  Bell,
+  Menu as MenuIcon,
+  ChevronDown,
+  User,
+  LogOut,
+  Settings,
+} from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -27,7 +34,6 @@ export function Navbar({ openSidebar }: NavbarProps) {
 
   return (
     <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200">
-      {/* MOBILE HAMBURGER */}
       <button
         className="md:hidden p-2 rounded-md hover:bg-gray-100"
         onClick={openSidebar}
@@ -35,11 +41,9 @@ export function Navbar({ openSidebar }: NavbarProps) {
         <MenuIcon className="w-6 h-6" />
       </button>
 
-      {/* EMPTY SPACER */}
       <div className="flex-1"></div>
 
       <div className="flex items-center gap-4">
-        {/* Notifications */}
         <div className="relative">
           <button className="relative p-2 rounded-full hover:bg-gray-100">
             <Bell className="w-5 h-5" />
@@ -52,7 +56,6 @@ export function Navbar({ openSidebar }: NavbarProps) {
           </button>
         </div>
 
-        {/* User Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger className="flex items-center gap-2">
             <Avatar className="w-8 h-8">
@@ -65,12 +68,14 @@ export function Navbar({ openSidebar }: NavbarProps) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => router.push("/profile")}>
-              Profile
+              <User /> Profile
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => router.push("/settings")}>
-              Settings
+              <Settings /> Settings
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOut /> Logout
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

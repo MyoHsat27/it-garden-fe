@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 interface Option {
   id: number | string;
   label: string;
+  disabled?: boolean;
 }
 
 interface SearchableSelectProps {
@@ -29,7 +30,7 @@ interface SearchableSelectProps {
   searchPlaceholder?: string;
   emptyMessage?: string;
   disabled?: boolean;
-  allowUnselect?: boolean; // 👈 new prop
+  allowUnselect?: boolean;
 }
 
 export function SearchableSelect({
@@ -40,13 +41,13 @@ export function SearchableSelect({
   searchPlaceholder = "Search...",
   emptyMessage = "No results found.",
   disabled,
-  allowUnselect = true, // 👈 default allows unselect
+  allowUnselect = true,
 }: SearchableSelectProps) {
   const selected = options.find((opt) => opt.id === value);
 
   const handleSelect = (id: number | string) => {
     if (allowUnselect && id === value) {
-      onChange(undefined); // 👈 unselect when clicked again
+      onChange(undefined);
     } else {
       onChange(id);
     }
@@ -68,6 +69,7 @@ export function SearchableSelect({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
+
       <PopoverContent className="p-0">
         <Command>
           <CommandInput placeholder={searchPlaceholder} />
@@ -78,6 +80,7 @@ export function SearchableSelect({
                 key={opt.id}
                 value={opt.label}
                 onSelect={() => handleSelect(opt.id)}
+                disabled={opt.disabled}
               >
                 <Check
                   className={cn(

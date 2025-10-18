@@ -82,7 +82,7 @@ export function RoleTable() {
         <div className="flex justify-between items-center mb-6">
           <div className="flex gap-3">
             <Input
-              placeholder="Search Roles..."
+              placeholder="Search roles"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="max-w-xs"

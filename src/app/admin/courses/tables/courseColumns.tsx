@@ -3,9 +3,13 @@ import { truncateDescription } from "@/lib/helpers";
 import { Course } from "@/types/api/course";
 
 export const courseColumns: Column<Course>[] = [
-  { key: "id", label: "ID", className: "" },
+  { key: "id", label: "ID" },
   { key: "name", label: "Name" },
-  { key: "price", label: "Price" },
+  {
+    key: "price",
+    label: "Price",
+    render: (course: Course) => `${course.price} MMK`,
+  },
   { key: "duration", label: "Duration" },
   {
     key: "description",

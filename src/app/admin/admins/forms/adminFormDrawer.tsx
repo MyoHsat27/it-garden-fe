@@ -237,8 +237,8 @@ export function AdminFormDrawer({
                   label: r.name,
                 })) ?? []
               }
-              placeholder="Select role..."
-              searchPlaceholder="Search role..."
+              placeholder="Select role"
+              searchPlaceholder="Search role"
               emptyMessage="No role found."
               allowUnselect={false}
             />

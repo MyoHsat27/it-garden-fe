@@ -8,11 +8,13 @@ import { Button } from "@/components/ui/button";
 import { enrollmentColumns } from "./enrollmentColumns";
 import { EnrollmentFormDrawer } from "../forms/enrollmentFormDrawer";
 import { EnrollmentDetailDrawer } from "../forms/enrollmentDetailDrawer";
-import { Enrollment } from "@/types/api/enrollment";
+import { Enrollment, PaymentStatus } from "@/types/api/enrollment";
 import {
   useDeleteEnrollment,
   useGetFilteredEnrollments,
 } from "@/hooks/useEnrollment";
+import { EnrollmentPaidFormDialog } from "../forms/enrollmentPaidFormDialog";
+import { BanknoteArrowUp } from "lucide-react";
 
 export function EnrollmentTable() {
   const [search, setSearch] = useState("");
@@ -22,6 +24,7 @@ export function EnrollmentTable() {
   const [selectedEnrollment, setSelectedEnrollment] =
     useState<Enrollment | null>(null);
   const [showCreateDrawer, setShowCreateDrawer] = useState(false);
+  const [showPaymentDrawer, setShowPaymentDrawer] = useState(false);
   const [showDetailDrawer, setShowDetailDrawer] = useState(false);
 
   const {
@@ -37,8 +40,6 @@ export function EnrollmentTable() {
   const total =
     enrollmentRes?.meta?.pagination?.totalItems ?? enrollments.length;
 
-  const deleteMutation = useDeleteEnrollment(selectedEnrollment?.id);
-
   const handlePageChange = (newPage: number) => setPage(newPage);
   const handlePageSizeChange = (newLimit: number) => {
     setLimit(newLimit);
@@ -48,6 +49,11 @@ export function EnrollmentTable() {
   const handleView = (enrollment: Enrollment) => {
     setSelectedEnrollment(enrollment);
     setShowDetailDrawer(true);
+  };
+
+  const handlePayment = (enrollment: Enrollment) => {
+    setSelectedEnrollment(enrollment);
+    setShowPaymentDrawer(true);
   };
 
   return (
@@ -67,7 +73,7 @@ export function EnrollmentTable() {
         <div className="flex justify-between items-center mb-6">
           <div className="flex gap-3">
             <Input
-              placeholder="Search Enrollments..."
+              placeholder="Search enrollments"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="max-w-xs"
@@ -85,6 +91,18 @@ export function EnrollmentTable() {
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
           onView={handleView}
+          renderActions={(enrollment: Enrollment) =>
+            enrollment.feeStatus !== PaymentStatus.PAID && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-green-600"
+                onClick={() => handlePayment(enrollment)}
+              >
+                <BanknoteArrowUp />
+              </Button>
+            )
+          }
         />
       </CardContent>
 
@@ -94,6 +112,13 @@ export function EnrollmentTable() {
           enrollment={selectedEnrollment ?? undefined}
           open={showCreateDrawer}
           onOpenChange={setShowCreateDrawer}
+        />
+      )}
+      {showPaymentDrawer && (
+        <EnrollmentPaidFormDialog
+          enrollment={selectedEnrollment as Enrollment}
+          open={showPaymentDrawer}
+          onOpenChange={setShowPaymentDrawer}
         />
       )}
 

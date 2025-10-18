@@ -1,11 +1,11 @@
-import { UserResponseDto } from "@/types/api/user";
+import { User } from "@/types/api/user";
 import { create } from "zustand";
 
 interface AuthState {
-  user: UserResponseDto | null;
+  user: User | null;
   role: string | null;
   token: string | null;
-  setAuth: (user: UserResponseDto, role: string, token: string) => void;
+  setAuth: (user: User, role: string, token: string) => void;
   logout: () => void;
 }
 
