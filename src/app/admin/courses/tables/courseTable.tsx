@@ -11,8 +11,11 @@ import { Course } from "@/types/api/course";
 import { courseColumns } from "./courseColumns";
 import { CourseFormDrawer } from "../forms/courseFormDrawer";
 import { CourseDetailDrawer } from "../forms/courseDetailDrawer";
+import { handleFormError } from "@/lib/helpers";
+import { usePermission } from "@/hooks/auth/usePermission";
 
 export function CourseTable() {
+  const { canPerform } = usePermission();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -22,11 +25,7 @@ export function CourseTable() {
   const [showDetailDrawer, setShowDetailDrawer] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const {
-    data: courseRes,
-    isLoading,
-    refetch,
-  } = useGetFilteredCourses({
+  const { data: courseRes, isLoading } = useGetFilteredCourses({
     search,
     page,
     limit,
@@ -61,6 +60,7 @@ export function CourseTable() {
     if (selectedCourse) {
       deleteMutation.mutate(selectedCourse.id, {
         onSuccess: () => setShowDeleteModal(false),
+        onError: (err) => handleFormError(err),
       });
     }
   };
@@ -69,14 +69,16 @@ export function CourseTable() {
     <Card className="py-6 shadow-sm gap-3">
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="text-xl">Courses</CardTitle>
-        <Button
-          onClick={() => {
-            setSelectedCourse(null);
-            setShowCreateDrawer(true);
-          }}
-        >
-          Create Course
-        </Button>
+        {canPerform("courses", "create") && (
+          <Button
+            onClick={() => {
+              setSelectedCourse(null);
+              setShowCreateDrawer(true);
+            }}
+          >
+            Create Course
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-6">
@@ -99,9 +101,9 @@ export function CourseTable() {
           total={total}
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          onView={canPerform("courses", "view") ? handleView : undefined}
+          onEdit={canPerform("courses", "update") ? handleEdit : undefined}
+          onDelete={canPerform("courses", "delete") ? handleDelete : undefined}
         />
       </CardContent>
 

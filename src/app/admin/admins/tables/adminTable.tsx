@@ -19,8 +19,11 @@ import { Admin } from "@/types/api/admin";
 import { Button } from "@/components/ui/button";
 import { AdminFormDrawer } from "../forms/adminFormDrawer";
 import { AdminDetailDrawer } from "../forms/adminDetailDrawer";
+import { usePermission } from "@/hooks/auth/usePermission";
+import { handleFormError } from "@/lib/helpers";
 
 export function AdminTable() {
+  const { canPerform } = usePermission();
   const [search, setSearch] = useState("");
   const [role, setRoleId] = useState<number | undefined>();
   const [page, setPage] = useState(1);
@@ -31,11 +34,7 @@ export function AdminTable() {
   const [showDetailDrawer, setShowDetailDrawer] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const {
-    data: adminRes,
-    isLoading,
-    refetch,
-  } = useGetFilteredAdmins({
+  const { data: adminRes, isLoading } = useGetFilteredAdmins({
     search,
     role,
     page,
@@ -73,6 +72,7 @@ export function AdminTable() {
     if (selectedAdmin) {
       deleteMutation.mutate(selectedAdmin.id, {
         onSuccess: () => setShowDeleteModal(false),
+        onError: (err) => handleFormError(err),
       });
     }
   };
@@ -81,14 +81,16 @@ export function AdminTable() {
     <Card className="py-6 shadow-sm gap-3">
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="text-xl">Admins</CardTitle>
-        <Button
-          onClick={() => {
-            setSelectedAdmin(null);
-            setShowCreateDrawer(true);
-          }}
-        >
-          Create Admin
-        </Button>
+        {canPerform("admins", "create") && (
+          <Button
+            onClick={() => {
+              setSelectedAdmin(null);
+              setShowCreateDrawer(true);
+            }}
+          >
+            Create Admin
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-6">
@@ -129,9 +131,9 @@ export function AdminTable() {
           total={total}
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          onView={canPerform("admins", "view") ? handleView : undefined}
+          onEdit={canPerform("admins", "update") ? handleEdit : undefined}
+          onDelete={canPerform("admins", "delete") ? handleDelete : undefined}
         />
       </CardContent>
 

@@ -148,36 +148,6 @@ export function TimeSlotFormDialog({
             )}
           </div>
 
-          {/* <div className="flex flex-col gap-3">
-            <Label htmlFor="dayOfWeek">Day of Week</Label>
-            <Controller
-              name="dayOfWeek"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  value={String(field.value)}
-                  onValueChange={(val) => field.onChange(Number(val))}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a day" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {days.map((d) => (
-                      <SelectItem key={d.value} value={String(d.value)}>
-                        {d.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            />
-            {errors.dayOfWeek && (
-              <span className="text-red-500 text-sm">
-                {errors.dayOfWeek.message}
-              </span>
-            )}
-          </div> */}
-
           <div className="flex flex-col gap-3">
             <Label htmlFor="startTime">Start Time</Label>
             <Input
@@ -185,6 +155,7 @@ export function TimeSlotFormDialog({
               type="time"
               {...register("startTime")}
               className={errors.startTime ? "border-red-500" : ""}
+              disabled={isEditing}
             />
             {errors.startTime && (
               <span className="text-red-500 text-sm">
@@ -200,6 +171,7 @@ export function TimeSlotFormDialog({
               type="time"
               {...register("endTime")}
               className={errors.endTime ? "border-red-500" : ""}
+              disabled={isEditing}
             />
             {errors.endTime && (
               <span className="text-red-500 text-sm">

@@ -14,8 +14,12 @@ import {
 import { classroomColumns } from "./classroomColumns";
 import { ClassroomFormDialog } from "../forms/classroomFormDialog";
 import { ClassroomDetailDrawer } from "../forms/classroomDetailDrawer";
+import { usePermission } from "@/hooks/auth/usePermission";
+import { handleFormError } from "@/lib/helpers";
 
 export function ClassroomTable() {
+  const { canPerform } = usePermission();
+
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -27,11 +31,7 @@ export function ClassroomTable() {
   const [showDetailDrawer, setShowDetailDrawer] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const {
-    data: classroomRes,
-    isLoading,
-    refetch,
-  } = useGetFilteredClassrooms({
+  const { data: classroomRes, isLoading } = useGetFilteredClassrooms({
     search,
     page,
     limit,
@@ -66,6 +66,7 @@ export function ClassroomTable() {
     if (selectedClassroom) {
       deleteMutation.mutate(selectedClassroom.id, {
         onSuccess: () => setShowDeleteModal(false),
+        onError: (err) => handleFormError(err),
       });
     }
   };
@@ -74,14 +75,16 @@ export function ClassroomTable() {
     <Card className="py-6 shadow-sm gap-3">
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="text-xl">Classrooms</CardTitle>
-        <Button
-          onClick={() => {
-            setSelectedClassroom(null);
-            setShowCreateDrawer(true);
-          }}
-        >
-          Create Classroom
-        </Button>
+        {canPerform("classrooms", "create") && (
+          <Button
+            onClick={() => {
+              setSelectedClassroom(null);
+              setShowCreateDrawer(true);
+            }}
+          >
+            Create Classroom
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-6">
@@ -104,9 +107,11 @@ export function ClassroomTable() {
           total={total}
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          onView={canPerform("classrooms", "view") ? handleView : undefined}
+          onEdit={canPerform("classrooms", "update") ? handleEdit : undefined}
+          onDelete={
+            canPerform("classrooms", "delete") ? handleDelete : undefined
+          }
         />
       </CardContent>
 

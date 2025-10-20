@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { DataTable } from "@/components/common/DataTable";
 import { useAuth } from "@/hooks/auth/useAuth";
 import {
@@ -16,9 +15,15 @@ import {
 import { attendanceColumns } from "./attendanceColumns";
 import { AttendanceDetailDrawer } from "../forms/attendanceDetailDrawer";
 import { Button } from "@/components/ui/button";
-import { CalendarSync } from "lucide-react";
-import { formatTimeAMPM, handleFormError, isToday } from "@/lib/helpers";
+import { CalendarSync, QrCode } from "lucide-react";
+import {
+  formatTimeAMPM,
+  handleFormError,
+  isOnTime,
+  isToday,
+} from "@/lib/helpers";
 import { ConfirmationDialog } from "@/components/common/ConfirmationDialog";
+import { AttendanceQrDialog } from "../forms/attendanceQrDialog";
 
 export function AttendanceTable() {
   const [search, setSearch] = useState("");
@@ -29,6 +34,7 @@ export function AttendanceTable() {
     useState<AttendanceSession | null>(null);
   const [showDetailDrawer, setShowDetailDrawer] = useState(false);
   const [showGenerateModal, setShowGenerateModal] = useState(false);
+  const [showQrDialog, setShowQrDialog] = useState(false);
 
   const { user } = useAuth();
 
@@ -58,6 +64,11 @@ export function AttendanceTable() {
   const handleView = (attendance: AttendanceSession) => {
     setSelectedAttendanceSession(attendance);
     setShowDetailDrawer(true);
+  };
+
+  const handleShowQr = (attendance: AttendanceSession) => {
+    setSelectedAttendanceSession(attendance);
+    setShowQrDialog(true);
   };
 
   const handleGenerate = (attendance: AttendanceSession) => {
@@ -90,19 +101,33 @@ export function AttendanceTable() {
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
           onView={handleView}
-          renderActions={(attendance: AttendanceSession) =>
-            attendance.status !== AttendanceSessionStatus.FINISHED &&
-            isToday(attendance.date) && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-green-600"
-                onClick={() => handleGenerate(attendance)}
-              >
-                <CalendarSync />
-              </Button>
-            )
-          }
+          renderActions={(attendance: AttendanceSession) => {
+            return (
+              <>
+                {attendance.status !== AttendanceSessionStatus.FINISHED &&
+                  isToday(attendance.date) && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-green-600"
+                      onClick={() => handleGenerate(attendance)}
+                    >
+                      <CalendarSync />
+                    </Button>
+                  )}
+
+                {attendance.status === AttendanceSessionStatus.FINISHED && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleShowQr(attendance)}
+                  >
+                    <QrCode />
+                  </Button>
+                )}
+              </>
+            );
+          }}
         />
       </CardContent>
 
@@ -111,6 +136,14 @@ export function AttendanceTable() {
           attendance={selectedAttendanceSession}
           open={showDetailDrawer}
           onOpenChange={setShowDetailDrawer}
+        />
+      )}
+
+      {showQrDialog && selectedAttendanceSession && (
+        <AttendanceQrDialog
+          session={selectedAttendanceSession}
+          open={showQrDialog}
+          onOpenChange={setShowQrDialog}
         />
       )}
 

@@ -25,7 +25,7 @@ export const useGetFilteredRoles = (filter: RoleFilter) => {
 
 export const useCreateRole = () => {
   return useWrite<Role>({
-    queryKey: ["roles/filtered"],
+    queryKey: ["/roles/filtered"],
     url: "/roles",
     method: "POST",
   });
@@ -33,7 +33,7 @@ export const useCreateRole = () => {
 
 export const useUpdateRole = (roleId?: number) => {
   return useWrite<Role>({
-    queryKey: ["roles/filtered"],
+    queryKey: ["/roles/filtered"],
     url: `/roles/${roleId}`,
     method: "PUT",
   });
@@ -41,7 +41,7 @@ export const useUpdateRole = (roleId?: number) => {
 
 export const useDeleteRole = (roleId?: number) => {
   return useWrite<{ data: null }>({
-    queryKey: ["roles/filtered"],
+    queryKey: ["/roles/filtered"],
     url: `/roles/${roleId}`,
     method: "DELETE",
   });

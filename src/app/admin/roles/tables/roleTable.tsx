@@ -11,8 +11,11 @@ import { useDeleteRole, useGetFilteredRoles } from "@/hooks/useRole";
 import { roleColumns } from "./roleColumns";
 import { RoleFormDrawer } from "../forms/roleFormDrawer";
 import { RoleDetailDrawer } from "../forms/roleDetailDrawer";
+import { usePermission } from "@/hooks/auth/usePermission";
+import { handleFormError } from "@/lib/helpers";
 
 export function RoleTable() {
+  const { canPerform } = usePermission();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -61,6 +64,7 @@ export function RoleTable() {
     if (selectedRole) {
       deleteMutation.mutate(selectedRole.id, {
         onSuccess: () => setShowDeleteModal(false),
+        onError: (err) => handleFormError(err),
       });
     }
   };
@@ -69,14 +73,16 @@ export function RoleTable() {
     <Card className="py-6 shadow-sm gap-3">
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="text-xl">Roles</CardTitle>
-        <Button
-          onClick={() => {
-            setSelectedRole(null);
-            setShowCreateDrawer(true);
-          }}
-        >
-          Create Role
-        </Button>
+        {canPerform("roles-permissions", "create") && (
+          <Button
+            onClick={() => {
+              setSelectedRole(null);
+              setShowCreateDrawer(true);
+            }}
+          >
+            Create Role
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-6">
@@ -99,9 +105,15 @@ export function RoleTable() {
           total={total}
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          onView={
+            canPerform("roles-permissions", "view") ? handleView : undefined
+          }
+          onEdit={
+            canPerform("roles-permissions", "update") ? handleEdit : undefined
+          }
+          onDelete={
+            canPerform("roles-permissions", "delete") ? handleDelete : undefined
+          }
         />
       </CardContent>
 

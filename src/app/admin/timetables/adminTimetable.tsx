@@ -7,7 +7,6 @@ import { CalendarEvent } from "@/types/common/calendarEvent";
 export function AdminTimetable() {
   const { data: eventsRes } = useGetAdminCalendar();
 
-  console.log(eventsRes?.data);
   const events = (eventsRes?.data ?? []).map((event: CalendarEvent) => ({
     id: event.id,
     title: event.title,

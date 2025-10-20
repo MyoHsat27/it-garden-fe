@@ -19,6 +19,8 @@ export interface AttendanceSession {
   teacherName: string;
   classroomName: string;
   date: string;
+  token: string;
+  expiredAt: string;
   startTime: string;
   endTime: string;
   status: AttendanceSessionStatus;
@@ -33,6 +35,8 @@ export interface AttendanceRecord {
   date: string;
   present: boolean;
   status: AttendanceRecordStatus;
+  token: string;
+  expiredAt: Date;
   createdAt: Date;
   updatedAt: Date;
 }

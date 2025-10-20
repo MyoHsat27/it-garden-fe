@@ -11,8 +11,6 @@ import {
   CalendarDays,
   Banknote,
   User,
-  MessageCircle,
-  Megaphone,
 } from "lucide-react";
 
 export interface MenuItem {
@@ -21,6 +19,7 @@ export interface MenuItem {
   href: string;
   visible: string[];
   group?: string;
+  permission?: string;
 }
 
 export const menuItems: MenuItem[] = [
@@ -38,6 +37,7 @@ export const menuItems: MenuItem[] = [
     href: "/admin/students",
     visible: ["admin"],
     group: "Student Management",
+    permission: "students:view",
   },
   {
     icon: Clipboard,
@@ -45,6 +45,7 @@ export const menuItems: MenuItem[] = [
     href: "/admin/enrollments",
     visible: ["admin"],
     group: "Student Management",
+    permission: "enrollments:view",
   },
   {
     icon: GraduationCap,
@@ -52,6 +53,7 @@ export const menuItems: MenuItem[] = [
     href: "/admin/teachers",
     visible: ["admin"],
     group: "Staff Management",
+    permission: "teachers:view",
   },
   {
     icon: Users,
@@ -59,6 +61,7 @@ export const menuItems: MenuItem[] = [
     href: "/admin/admins",
     visible: ["admin"],
     group: "Staff Management",
+    permission: "admins:view",
   },
   {
     icon: Users,
@@ -66,6 +69,7 @@ export const menuItems: MenuItem[] = [
     href: "/admin/roles",
     visible: ["admin"],
     group: "Staff Management",
+    permission: "roles-permissions:view",
   },
   {
     icon: Clipboard,
@@ -73,6 +77,7 @@ export const menuItems: MenuItem[] = [
     href: "/admin/batches",
     visible: ["admin"],
     group: "Academics",
+    permission: "batches:view",
   },
   {
     icon: Book,
@@ -80,6 +85,7 @@ export const menuItems: MenuItem[] = [
     href: "/admin/courses",
     visible: ["admin"],
     group: "Academics",
+    permission: "courses:view",
   },
   {
     icon: FileText,
@@ -87,6 +93,7 @@ export const menuItems: MenuItem[] = [
     href: "/admin/classrooms",
     visible: ["admin"],
     group: "Academics",
+    permission: "classrooms:view",
   },
   {
     icon: Calendar,
@@ -94,6 +101,7 @@ export const menuItems: MenuItem[] = [
     href: "/admin/timeslots",
     visible: ["admin"],
     group: "Academics",
+    permission: "timeslots:view",
   },
   {
     icon: CalendarDays,
@@ -101,6 +109,7 @@ export const menuItems: MenuItem[] = [
     href: "/admin/timetables",
     visible: ["admin"],
     group: "Academics",
+    permission: "timetables:view",
   },
   {
     icon: Banknote,
@@ -108,6 +117,7 @@ export const menuItems: MenuItem[] = [
     href: "/admin/payments",
     visible: ["admin"],
     group: "Finance",
+    permission: "payments:view",
   },
   {
     icon: Bell,
@@ -115,6 +125,7 @@ export const menuItems: MenuItem[] = [
     href: "/admin/announcements",
     visible: ["admin"],
     group: "Communication",
+    permission: "announcements:view",
   },
 
   // Teacher-specific
@@ -208,13 +219,6 @@ export const menuItems: MenuItem[] = [
     icon: Clipboard,
     label: "Assignments",
     href: "/student/assignments",
-    visible: ["student"],
-    group: "Courses & Assignments",
-  },
-  {
-    icon: FileText,
-    label: "Submissions",
-    href: "/student/submissions",
     visible: ["student"],
     group: "Courses & Assignments",
   },

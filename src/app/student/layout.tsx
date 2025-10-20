@@ -5,6 +5,7 @@ import { Navbar } from "@/components/common/Navbar";
 import { Menu } from "@/components/common/Menu";
 import Image from "next/image";
 import { X } from "lucide-react";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 export default function StudentLayout({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -50,7 +51,9 @@ export default function StudentLayout({ children }: { children: ReactNode }) {
       {/* MAIN CONTENT */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar openSidebar={() => setSidebarOpen(true)} />
-        <main className="flex-1 overflow-auto bg-gray-50 p-4">{children}</main>
+        <main className="flex-1 overflow-auto bg-gray-50 p-4">
+          <ProtectedRoute allowedRoles={["student"]}>{children}</ProtectedRoute>
+        </main>
       </div>
     </div>
   );

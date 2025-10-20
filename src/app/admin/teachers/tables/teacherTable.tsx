@@ -11,8 +11,12 @@ import { useDeleteTeacher, useGetFilteredTeachers } from "@/hooks/useTeacher";
 import { Button } from "@/components/ui/button";
 import { TeacherFormDrawer } from "../forms/teacherFormDrawer";
 import { TeacherDetailDrawer } from "../forms/teacherDetailDrawer";
+import { usePermission } from "@/hooks/auth/usePermission";
+import { handleFormError } from "@/lib/helpers";
 
 export function TeacherTable() {
+  const { canPerform } = usePermission();
+
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -22,11 +26,7 @@ export function TeacherTable() {
   const [showDetailDrawer, setShowDetailDrawer] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const {
-    data: teacherRes,
-    isLoading,
-    refetch,
-  } = useGetFilteredTeachers({
+  const { data: teacherRes, isLoading } = useGetFilteredTeachers({
     search,
     page,
     limit,
@@ -61,6 +61,7 @@ export function TeacherTable() {
     if (selectedTeacher) {
       deleteMutation.mutate(selectedTeacher.id, {
         onSuccess: () => setShowDeleteModal(false),
+        onError: (err) => handleFormError(err),
       });
     }
   };
@@ -69,14 +70,16 @@ export function TeacherTable() {
     <Card className="py-6 shadow-sm gap-3">
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="text-xl">Teachers</CardTitle>
-        <Button
-          onClick={() => {
-            setSelectedTeacher(null);
-            setShowCreateDrawer(true);
-          }}
-        >
-          Create Teacher
-        </Button>
+        {canPerform("teachers", "create") && (
+          <Button
+            onClick={() => {
+              setSelectedTeacher(null);
+              setShowCreateDrawer(true);
+            }}
+          >
+            Create Teacher
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-6">
@@ -99,9 +102,9 @@ export function TeacherTable() {
           total={total}
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          onView={canPerform("teachers", "view") ? handleView : undefined}
+          onEdit={canPerform("teachers", "update") ? handleEdit : undefined}
+          onDelete={canPerform("teachers", "delete") ? handleDelete : undefined}
         />
       </CardContent>
 

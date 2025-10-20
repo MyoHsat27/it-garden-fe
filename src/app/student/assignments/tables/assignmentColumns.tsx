@@ -1,26 +1,41 @@
 import { Column } from "@/components/common/DataTable";
-import { Assignment } from "@/types/api/assignment";
+import { StudentAssignment } from "@/types/api/assignment";
 
-export const enrollmentColumns: Column<Assignment>[] = [
+export const enrollmentColumns: Column<StudentAssignment>[] = [
   { key: "id", label: "ID" },
   { key: "title", label: "Title" },
   { key: "description", label: "Description" },
   {
+    key: "batch",
+    label: "Batch",
+    render: (assignment: StudentAssignment) => assignment.batchName,
+  },
+  {
+    key: "course",
+    label: "Course",
+    render: (assignment: StudentAssignment) => assignment.courseName,
+  },
+  {
     key: "startDate",
     label: "Start Date",
-    render: (assignment: Assignment) =>
-      new Date(assignment.startDate).toLocaleDateString(),
+    render: (assignment: StudentAssignment) =>
+      new Date(assignment.startDate).toDateString(),
   },
   {
     key: "dueDate",
     label: "Due Date",
-    render: (assignment: Assignment) =>
-      new Date(assignment.dueDate).toLocaleDateString(),
+    render: (assignment: StudentAssignment) =>
+      new Date(assignment.dueDate).toDateString(),
   },
   {
-    key: "createdAt",
-    label: "Created At",
-    render: (enrollment: Assignment) =>
-      new Date(enrollment.createdAt).toLocaleDateString(),
+    key: "assignmentStatus",
+    label: "Assignment Status",
+    render: (assignment: StudentAssignment) => assignment.status,
+  },
+  {
+    key: "submissionStatus",
+    label: "Submission Status",
+    render: (assignment: StudentAssignment) =>
+      assignment.submission ? assignment.submission.status : "-",
   },
 ];

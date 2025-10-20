@@ -9,14 +9,13 @@ import { enrollmentColumns } from "./enrollmentColumns";
 import { EnrollmentFormDrawer } from "../forms/enrollmentFormDrawer";
 import { EnrollmentDetailDrawer } from "../forms/enrollmentDetailDrawer";
 import { Enrollment, PaymentStatus } from "@/types/api/enrollment";
-import {
-  useDeleteEnrollment,
-  useGetFilteredEnrollments,
-} from "@/hooks/useEnrollment";
+import { useGetFilteredEnrollments } from "@/hooks/useEnrollment";
 import { EnrollmentPaidFormDialog } from "../forms/enrollmentPaidFormDialog";
 import { BanknoteArrowUp } from "lucide-react";
+import { usePermission } from "@/hooks/auth/usePermission";
 
 export function EnrollmentTable() {
+  const { canPerform } = usePermission();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -60,14 +59,16 @@ export function EnrollmentTable() {
     <Card className="py-6 shadow-sm gap-3">
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="text-xl">Enrollment</CardTitle>
-        <Button
-          onClick={() => {
-            setSelectedEnrollment(null);
-            setShowCreateDrawer(true);
-          }}
-        >
-          Add Enrollment
-        </Button>
+        {canPerform("enrollments", "create") && (
+          <Button
+            onClick={() => {
+              setSelectedEnrollment(null);
+              setShowCreateDrawer(true);
+            }}
+          >
+            Add Enrollment
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-6">
@@ -90,19 +91,23 @@ export function EnrollmentTable() {
           total={total}
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
-          onView={handleView}
-          renderActions={(enrollment: Enrollment) =>
-            enrollment.feeStatus !== PaymentStatus.PAID && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-green-600"
-                onClick={() => handlePayment(enrollment)}
-              >
-                <BanknoteArrowUp />
-              </Button>
-            )
-          }
+          onView={canPerform("enrollments", "view") ? handleView : undefined}
+          renderActions={(enrollment: Enrollment) => {
+            if (canPerform("enrollments", "add-payment")) {
+              return (
+                enrollment.feeStatus !== PaymentStatus.PAID && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-green-600"
+                    onClick={() => handlePayment(enrollment)}
+                  >
+                    <BanknoteArrowUp />
+                  </Button>
+                )
+              );
+            }
+          }}
         />
       </CardContent>
 

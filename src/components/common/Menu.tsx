@@ -10,14 +10,32 @@ interface MenuProps {
   closeSidebar?: () => void;
   defaultOpenGroups?: string[];
 }
-
 export const Menu = ({ closeSidebar, defaultOpenGroups = [] }: MenuProps) => {
-  const { role } = useAuth();
+  const { role, user } = useAuth();
+
+  const permissions = useMemo(() => {
+    if (user?.adminProfile?.role?.permissions) {
+      return user.adminProfile.role.permissions.map(
+        (p) => `${p.subject}:${p.action}`
+      );
+    }
+    return [];
+  }, [user]);
+
   const pathname = usePathname();
 
   const { groups, groupNames } = useMemo(() => {
     if (!role) return { groups: {}, groupNames: [] };
-    const filtered = menuItems.filter((item) => item.visible.includes(role));
+
+    const filtered = menuItems.filter((item) => {
+      const roleVisible = item.visible.includes(role);
+
+      const hasPermission =
+        !item.permission || permissions.includes(item.permission);
+
+      return roleVisible && hasPermission;
+    });
+
     const g: Record<string, MenuItem[]> = {};
     filtered.forEach((item) => {
       const group = item.group || "Other";

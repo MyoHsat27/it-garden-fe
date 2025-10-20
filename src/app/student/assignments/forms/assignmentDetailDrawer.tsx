@@ -1,9 +1,10 @@
 import { AppDrawer } from "@/components/common/AppDrawer";
 import { Button } from "@/components/ui/button";
-import { Assignment } from "@/types/api/assignment";
+import { StudentAssignment } from "@/types/api/assignment";
+import Link from "next/link";
 
 interface AssignmentDetailDrawerProps {
-  assignment: Assignment;
+  assignment: StudentAssignment;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -28,9 +29,17 @@ export function AssignmentDetailDrawer({
         <div>
           <strong>ID:</strong> {assignment.id}
         </div>
+        {assignment.media && (
+          <div>
+            <a download target="_blank" href={assignment.media.url}>
+              Attachment
+            </a>{" "}
+            {assignment.id}
+          </div>
+        )}
         <div>
-          <strong>Created At:</strong>{" "}
-          {new Date(assignment.createdAt).toLocaleString()}
+          <strong>Due Date:</strong>{" "}
+          {new Date(assignment.dueDate).toDateString()}
         </div>
       </div>
     </AppDrawer>

@@ -4,15 +4,17 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { DataTable } from "@/components/common/DataTable";
-import { ConfirmationDialog } from "@/components/common/ConfirmationDialog";
 import { Button } from "@/components/ui/button";
 import { Student } from "@/types/api/student";
-import { useDeleteStudent, useGetFilteredStudents } from "@/hooks/useStudent";
+import { useGetFilteredStudents } from "@/hooks/useStudent";
 import { studentColumns } from "./studentColumns";
 import { StudentFormDrawer } from "../forms/studentFormDrawer";
 import { StudentDetailDrawer } from "../forms/studentDetailDrawer";
+import { usePermission } from "@/hooks/auth/usePermission";
 
 export function StudentTable() {
+  const { canPerform } = usePermission();
+
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -34,8 +36,6 @@ export function StudentTable() {
   const students = studentRes?.data ?? [];
   const total = studentRes?.meta?.pagination?.totalItems ?? students.length;
 
-  const deleteMutation = useDeleteStudent(selectedStudent?.id);
-
   const handlePageChange = (newPage: number) => setPage(newPage);
   const handlePageSizeChange = (newLimit: number) => {
     setLimit(newLimit);
@@ -52,31 +52,20 @@ export function StudentTable() {
     setShowCreateDrawer(true);
   };
 
-  const handleDelete = (student: Student) => {
-    setSelectedStudent(student);
-    setShowDeleteModal(true);
-  };
-
-  const confirmDelete = () => {
-    if (selectedStudent) {
-      deleteMutation.mutate(selectedStudent.id, {
-        onSuccess: () => setShowDeleteModal(false),
-      });
-    }
-  };
-
   return (
     <Card className="py-6 shadow-sm gap-3">
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="text-xl">Students</CardTitle>
-        <Button
-          onClick={() => {
-            setSelectedStudent(null);
-            setShowCreateDrawer(true);
-          }}
-        >
-          Create Student
-        </Button>
+        {canPerform("students", "create") && (
+          <Button
+            onClick={() => {
+              setSelectedStudent(null);
+              setShowCreateDrawer(true);
+            }}
+          >
+            Create Student
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-6">
@@ -99,9 +88,8 @@ export function StudentTable() {
           total={total}
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          onView={canPerform("admins", "view") ? handleView : undefined}
+          onEdit={canPerform("admins", "update") ? handleEdit : undefined}
         />
       </CardContent>
 
@@ -119,18 +107,6 @@ export function StudentTable() {
           student={selectedStudent}
           open={showDetailDrawer}
           onOpenChange={setShowDetailDrawer}
-        />
-      )}
-
-      {showDeleteModal && selectedStudent && (
-        <ConfirmationDialog
-          title="Delete Student"
-          description={`Are you sure you want to delete student "${selectedStudent.fullName}"?`}
-          open={showDeleteModal}
-          onOpenChange={setShowDeleteModal}
-          onConfirm={confirmDelete}
-          confirmButtonVariant={"destructive"}
-          confirmText="Delete"
         />
       )}
     </Card>

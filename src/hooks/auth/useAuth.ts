@@ -39,5 +39,5 @@ export const useAuth = (options?: { redirectToLogin?: boolean }) => {
     }
   }, [token, role, pathname, router]);
 
-  return { token, user, role, logout };
+  return { token, user, role, logout, hydrated };
 };

@@ -10,25 +10,26 @@ import { Assignment } from "@/types/api/assignment";
 import { useGetFilteredAssignments } from "@/hooks/useAssignment";
 import { AssignmentFormDrawer } from "../forms/assignmentFormDrawer";
 import { AssignmentDetailDrawer } from "../forms/assignmentDetailDrawer";
+import { useAuth } from "@/hooks/auth/useAuth";
 
 export function AssignmentTable() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
+  const { user } = useAuth();
+  const teacherId = user?.teacherProfile?.id;
+
   const [selectedAssignment, setSelectedAssignment] =
     useState<Assignment | null>(null);
   const [showCreateDrawer, setShowCreateDrawer] = useState(false);
   const [showDetailDrawer, setShowDetailDrawer] = useState(false);
 
-  const {
-    data: assignmentRes,
-    isLoading,
-    refetch,
-  } = useGetFilteredAssignments({
+  const { data: assignmentRes, isLoading } = useGetFilteredAssignments({
     search,
     page,
     limit,
+    teacherId,
   });
   const assignments = assignmentRes?.data ?? [];
   const total =

@@ -14,8 +14,12 @@ import { TimeSlot } from "@/types/api/timeSlot";
 import { timeSlotColumns } from "./timeSlotColumns";
 import { TimeSlotFormDialog } from "../forms/timeSlotFormDialog";
 import { TimeSlotDetailDrawer } from "../forms/timeSlotDetailDrawer";
+import { handleFormError } from "@/lib/helpers";
+import { usePermission } from "@/hooks/auth/usePermission";
 
 export function TimeSlotTable() {
+  const { canPerform } = usePermission();
+
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -27,11 +31,7 @@ export function TimeSlotTable() {
   const [showDetailDrawer, setShowDetailDrawer] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const {
-    data: timeSlotsRes,
-    isLoading,
-    refetch,
-  } = useGetFilteredTimeSlots({
+  const { data: timeSlotsRes, isLoading } = useGetFilteredTimeSlots({
     search,
     page,
     limit,
@@ -66,6 +66,7 @@ export function TimeSlotTable() {
     if (selectedTimeSlot) {
       deleteMutation.mutate(selectedTimeSlot.id, {
         onSuccess: () => setShowDeleteModal(false),
+        onError: (err) => handleFormError(err),
       });
     }
   };
@@ -74,14 +75,16 @@ export function TimeSlotTable() {
     <Card className="py-6 shadow-sm gap-3">
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="text-xl">Time slots</CardTitle>
-        <Button
-          onClick={() => {
-            setSelectedTimeSlot(null);
-            setShowCreateDrawer(true);
-          }}
-        >
-          Create Time Slot
-        </Button>
+        {canPerform("timeslots", "create") && (
+          <Button
+            onClick={() => {
+              setSelectedTimeSlot(null);
+              setShowCreateDrawer(true);
+            }}
+          >
+            Create Time Slot
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-6">
@@ -104,9 +107,11 @@ export function TimeSlotTable() {
           total={total}
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          onView={canPerform("timeslots", "view") ? handleView : undefined}
+          onEdit={canPerform("timeslots", "update") ? handleEdit : undefined}
+          onDelete={
+            canPerform("timeslots", "delete") ? handleDelete : undefined
+          }
         />
       </CardContent>
 

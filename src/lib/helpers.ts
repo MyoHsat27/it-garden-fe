@@ -56,3 +56,14 @@ export function isToday(dateStr: string) {
   const today = new Date().toISOString().split("T")[0];
   return dateStr === today;
 }
+
+export function isOnTime(dateStr?: string): boolean {
+  if (!dateStr) return false;
+
+  const now = new Date();
+  const expiry = new Date(dateStr);
+
+  if (isNaN(expiry.getTime())) return false;
+
+  return expiry >= now;
+}

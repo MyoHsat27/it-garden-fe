@@ -11,8 +11,12 @@ import { useDeleteBatch, useGetFilteredBatches } from "@/hooks/useBatch";
 import { batchColumns } from "./batchColumns";
 import { BatchFormDrawer } from "../forms/batchFormDrawer";
 import { BatchDetailDrawer } from "../forms/batchDetailDrawer";
+import { usePermission } from "@/hooks/auth/usePermission";
+import { handleFormError } from "@/lib/helpers";
 
 export function BatchTable() {
+  const { canPerform } = usePermission();
+
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -61,6 +65,7 @@ export function BatchTable() {
     if (selectedBatch) {
       deleteMutation.mutate(selectedBatch.id, {
         onSuccess: () => setShowDeleteModal(false),
+        onError: (err) => handleFormError(err),
       });
     }
   };
@@ -69,14 +74,16 @@ export function BatchTable() {
     <Card className="py-6 shadow-sm gap-3">
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="text-xl">Batches</CardTitle>
-        <Button
-          onClick={() => {
-            setSelectedBatch(null);
-            setShowCreateDrawer(true);
-          }}
-        >
-          Create Batch
-        </Button>
+        {canPerform("batches", "create") && (
+          <Button
+            onClick={() => {
+              setSelectedBatch(null);
+              setShowCreateDrawer(true);
+            }}
+          >
+            Create Batch
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-6">
@@ -99,9 +106,9 @@ export function BatchTable() {
           total={total}
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          onView={canPerform("batches", "view") ? handleView : undefined}
+          onEdit={canPerform("batches", "update") ? handleEdit : undefined}
+          onDelete={canPerform("batches", "delete") ? handleDelete : undefined}
         />
       </CardContent>
 

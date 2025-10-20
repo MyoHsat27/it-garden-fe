@@ -4,13 +4,14 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { DataTable } from "@/components/common/DataTable";
-import { Button } from "@/components/ui/button";
 import { enrollmentColumns } from "./assignmentColumns";
-import { Assignment } from "@/types/api/assignment";
-import { useGetFilteredAssignments } from "@/hooks/useAssignment";
-import { AssignmentFormDrawer } from "../forms/assignmentFormDrawer";
+import { Assignment, StudentAssignment } from "@/types/api/assignment";
+import { useGetFilteredStudentAssignments } from "@/hooks/useAssignment";
 import { AssignmentDetailDrawer } from "../forms/assignmentDetailDrawer";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { AssignmentFormDialog } from "../forms/assignmentFormDialog";
+import { Button } from "@/components/ui/button";
+import { Notebook } from "lucide-react";
 
 export function AssignmentTable() {
   const [search, setSearch] = useState("");
@@ -21,11 +22,11 @@ export function AssignmentTable() {
   const studentId = user?.studentProfile?.id;
 
   const [selectedAssignment, setSelectedAssignment] =
-    useState<Assignment | null>(null);
+    useState<StudentAssignment | null>(null);
   const [showCreateDrawer, setShowCreateDrawer] = useState(false);
   const [showDetailDrawer, setShowDetailDrawer] = useState(false);
 
-  const { data: assignmentRes, isLoading } = useGetFilteredAssignments({
+  const { data: assignmentRes, isLoading } = useGetFilteredStudentAssignments({
     studentId,
     search,
     page,
@@ -41,23 +42,19 @@ export function AssignmentTable() {
     setPage(1);
   };
 
-  const handleView = (assignment: Assignment) => {
+  const handleView = (assignment: StudentAssignment) => {
     setSelectedAssignment(assignment);
     setShowDetailDrawer(true);
+  };
+  const handleSubmit = (assignment: StudentAssignment) => {
+    setSelectedAssignment(assignment);
+    setShowCreateDrawer(true);
   };
 
   return (
     <Card className="py-6 shadow-sm gap-3">
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="text-xl">Assignment</CardTitle>
-        <Button
-          onClick={() => {
-            setSelectedAssignment(null);
-            setShowCreateDrawer(true);
-          }}
-        >
-          Create Assignment
-        </Button>
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-6">
@@ -81,13 +78,22 @@ export function AssignmentTable() {
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
           onView={handleView}
+          renderActions={(assignment: StudentAssignment) => (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleSubmit(assignment)}
+            >
+              <Notebook />
+            </Button>
+          )}
         />
       </CardContent>
 
       {/* Drawers */}
-      {showCreateDrawer && (
-        <AssignmentFormDrawer
-          assignment={selectedAssignment ?? undefined}
+      {showCreateDrawer && selectedAssignment && (
+        <AssignmentFormDialog
+          assignment={selectedAssignment}
           open={showCreateDrawer}
           onOpenChange={setShowCreateDrawer}
         />

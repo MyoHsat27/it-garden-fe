@@ -52,3 +52,10 @@ export const useUpdateAttendanceRecords = (
     method: "PUT",
   });
 };
+
+export const useScanAttendanceRecords = (token: string) => {
+  return useWrite<{ data: AttendanceRecord[] }>({
+    url: `attendances/records/scan/${token}`,
+    method: "POST",
+  });
+};

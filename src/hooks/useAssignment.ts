@@ -1,5 +1,5 @@
 import { useRead, useWrite } from "@/lib/queryClient";
-import { Assignment } from "@/types/api/assignment";
+import { Assignment, StudentAssignment } from "@/types/api/assignment";
 import { PaginatedResponse } from "@/types/api/pagination";
 
 interface AssignmentFilter {
@@ -16,6 +16,14 @@ export const useGetFilteredAssignments = (filter: AssignmentFilter) => {
   return useRead<PaginatedResponse<Assignment>>({
     queryKey: ["assignments/filtered", JSON.stringify(filter)],
     url: "/assignments/filtered",
+    params: filter,
+  });
+};
+
+export const useGetFilteredStudentAssignments = (filter: AssignmentFilter) => {
+  return useRead<PaginatedResponse<StudentAssignment>>({
+    queryKey: ["assignments/students/filtered", JSON.stringify(filter)],
+    url: "/assignments/students/filtered",
     params: filter,
   });
 };

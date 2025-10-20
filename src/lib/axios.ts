@@ -1,3 +1,4 @@
+import { baseUrl } from "@/constants/base-url";
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 
 let isRefreshing = false;
@@ -15,10 +16,7 @@ const processQueue = (error: unknown, token: string | null = null) => {
 };
 
 export const axiosApi = axios.create({
-  baseURL:
-    process.env.NEXT_PUBLIC_API_URL + "/api/v1" ||
-    "http://localhost:3000/api/v1",
-
+  baseURL: baseUrl,
   timeout: 60000,
   withCredentials: true,
 });
