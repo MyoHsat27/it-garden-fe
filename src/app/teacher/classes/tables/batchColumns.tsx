@@ -49,8 +49,8 @@ export const batchColumns: Column<Batch>[] = [
     },
   },
   {
-    key: "createdAt",
-    label: "Created At",
-    render: (batch: Batch) => new Date(batch.createdAt).toLocaleDateString(),
+    key: "startedAt",
+    label: "Started At",
+    render: (batch: Batch) => new Date(batch.startDate).toLocaleDateString(),
   },
 ];

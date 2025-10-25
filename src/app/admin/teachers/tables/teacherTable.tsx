@@ -85,10 +85,10 @@ export function TeacherTable() {
         <div className="flex justify-between items-center mb-6">
           <div className="flex gap-3">
             <Input
-              placeholder="Search teachers"
+              placeholder="Search by name"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="max-w-xs"
+              className="w-70"
             />
           </div>
         </div>

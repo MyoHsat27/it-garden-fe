@@ -10,6 +10,10 @@ export interface Assignment {
   dueDate: string;
   batch: Batch;
   media: Media;
+  totalRequiredSubmissions: number;
+  currentSubmissionCount: number;
+  pendingSubmissionCount: number;
+  gradedSubmissionCount: number;
   createdAt: Date;
   updatedAt: Date;
 }

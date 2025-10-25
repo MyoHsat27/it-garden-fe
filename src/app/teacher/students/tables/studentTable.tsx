@@ -45,16 +45,16 @@ export function StudentTable() {
   return (
     <Card className="py-6 shadow-sm gap-3">
       <CardHeader className="flex justify-between items-center">
-        <CardTitle className="text-xl">Students</CardTitle>
+        <CardTitle className="text-xl">My Students</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-6">
           <div className="flex gap-3">
             <Input
-              placeholder="Search students"
+              placeholder="Search by name or registration no"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="max-w-xs"
+              className="w-70"
             />
           </div>
         </div>

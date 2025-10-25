@@ -28,7 +28,6 @@ export function ClassroomTable() {
     null
   );
   const [showCreateDrawer, setShowCreateDrawer] = useState(false);
-  const [showDetailDrawer, setShowDetailDrawer] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const { data: classroomRes, isLoading } = useGetFilteredClassrooms({
@@ -45,11 +44,6 @@ export function ClassroomTable() {
   const handlePageSizeChange = (newLimit: number) => {
     setLimit(newLimit);
     setPage(1);
-  };
-
-  const handleView = (Classroom: Classroom) => {
-    setSelectedClassroom(Classroom);
-    setShowDetailDrawer(true);
   };
 
   const handleEdit = (Classroom: Classroom) => {
@@ -107,7 +101,6 @@ export function ClassroomTable() {
           total={total}
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
-          onView={canPerform("classrooms", "view") ? handleView : undefined}
           onEdit={canPerform("classrooms", "update") ? handleEdit : undefined}
           onDelete={
             canPerform("classrooms", "delete") ? handleDelete : undefined
@@ -121,14 +114,6 @@ export function ClassroomTable() {
           classroom={selectedClassroom ?? undefined}
           open={showCreateDrawer}
           onOpenChange={setShowCreateDrawer}
-        />
-      )}
-
-      {showDetailDrawer && selectedClassroom && (
-        <ClassroomDetailDrawer
-          classroom={selectedClassroom}
-          open={showDetailDrawer}
-          onOpenChange={setShowDetailDrawer}
         />
       )}
 

@@ -51,10 +51,10 @@ export function BatchTable() {
     setShowDetailDrawer(true);
   };
 
-  const handleEdit = (Batch: Batch) => {
-    setSelectedBatch(Batch);
-    setShowCreateDrawer(true);
-  };
+  // const handleEdit = (Batch: Batch) => {
+  //   setSelectedBatch(Batch);
+  //   setShowCreateDrawer(true);
+  // };
 
   const handleDelete = (Batch: Batch) => {
     setSelectedBatch(Batch);
@@ -107,7 +107,7 @@ export function BatchTable() {
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
           onView={canPerform("batches", "view") ? handleView : undefined}
-          onEdit={canPerform("batches", "update") ? handleEdit : undefined}
+          // onEdit={canPerform("batches", "update") ? handleEdit : undefined}
           onDelete={canPerform("batches", "delete") ? handleDelete : undefined}
         />
       </CardContent>

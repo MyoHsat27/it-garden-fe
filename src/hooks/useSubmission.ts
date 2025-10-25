@@ -1,5 +1,6 @@
 import { useRead, useWrite } from "@/lib/queryClient";
 import { Assignment } from "@/types/api/assignment";
+import { Submission } from "@/types/api/submission";
 
 export const useCreateSubmission = () => {
   return useWrite<Assignment>({
@@ -9,17 +10,20 @@ export const useCreateSubmission = () => {
   });
 };
 
-export const useGradeSubmission = (submissionId?: number) => {
+export const useGradeSubmission = (
+  assignmentId: number,
+  submissionId: number
+) => {
   return useWrite<Assignment>({
-    queryKey: ["assignments/filtered"],
+    queryKey: [`/submissions/assignment/${assignmentId}`],
     url: `/submissions/${submissionId}/grade`,
     method: "PUT",
   });
 };
 
 export const useGetSubmissionByAssignment = (assignmentId?: number) => {
-  return useRead<Assignment>({
-    queryKey: ["assignments/filtered"],
-    url: `/submissions/${assignmentId}/grade`,
+  return useRead<{ data: Submission[] }>({
+    queryKey: [`/submissions/assignment/${assignmentId}`],
+    url: `/submissions/assignment/${assignmentId}`,
   });
 };

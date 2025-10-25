@@ -4,9 +4,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { DataTable } from "@/components/common/DataTable";
-import { PaymentDetailDrawer } from "../forms/paymentDetailDrawer";
 import { paymentColumns } from "./paymentColumns";
-import { Payment } from "@/types/api/payment";
 import { useGetFilteredPayments } from "@/hooks/usePayment";
 import { useAuth } from "@/hooks/auth/useAuth";
 
@@ -14,9 +12,6 @@ export function PaymentTable() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-
-  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
-  const [showDetailDrawer, setShowDetailDrawer] = useState(false);
 
   const { user } = useAuth();
 
@@ -35,11 +30,6 @@ export function PaymentTable() {
   const handlePageSizeChange = (newLimit: number) => {
     setLimit(newLimit);
     setPage(1);
-  };
-
-  const handleView = (payment: Payment) => {
-    setSelectedPayment(payment);
-    setShowDetailDrawer(true);
   };
 
   return (
@@ -68,17 +58,8 @@ export function PaymentTable() {
           total={total}
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
-          onView={handleView}
         />
       </CardContent>
-
-      {showDetailDrawer && selectedPayment && (
-        <PaymentDetailDrawer
-          payment={selectedPayment}
-          open={showDetailDrawer}
-          onOpenChange={setShowDetailDrawer}
-        />
-      )}
     </Card>
   );
 }

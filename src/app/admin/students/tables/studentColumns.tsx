@@ -18,7 +18,7 @@ export const studentColumns: Column<Student>[] = [
   },
   {
     key: "createdAt",
-    label: "Created At",
+    label: "Enrolled At",
     render: (student: Student) =>
       new Date(student.createdAt).toLocaleDateString(),
   },

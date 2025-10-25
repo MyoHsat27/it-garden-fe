@@ -78,15 +78,17 @@ export function AssignmentTable() {
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
           onView={handleView}
-          renderActions={(assignment: StudentAssignment) => (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => handleSubmit(assignment)}
-            >
-              <Notebook />
-            </Button>
-          )}
+          renderActions={(assignment: StudentAssignment) =>
+            !assignment.submission && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleSubmit(assignment)}
+              >
+                <Notebook />
+              </Button>
+            )
+          }
         />
       </CardContent>
 

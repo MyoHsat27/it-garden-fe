@@ -171,27 +171,6 @@ export const menuItems: MenuItem[] = [
     visible: ["teacher"],
     group: "Students & Performance",
   },
-  {
-    icon: FileText,
-    label: "Submissions",
-    href: "/teacher/submissions",
-    visible: ["teacher"],
-    group: "Students & Performance",
-  },
-  {
-    icon: Calendar,
-    label: "Exams",
-    href: "/teacher/exams",
-    visible: ["teacher"],
-    group: "Students & Performance",
-  },
-  {
-    icon: CheckSquare,
-    label: "Exam Results",
-    href: "/teacher/exam-results",
-    visible: ["teacher"],
-    group: "Students & Performance",
-  },
 
   // Student-specific
   {
@@ -210,38 +189,17 @@ export const menuItems: MenuItem[] = [
   },
   {
     icon: Book,
-    label: "Enrolled Courses",
+    label: "My Courses",
     href: "/student/enrolled-courses",
     visible: ["student"],
-    group: "Courses & Assignments",
+    group: "Academics",
   },
   {
     icon: Clipboard,
     label: "Assignments",
     href: "/student/assignments",
     visible: ["student"],
-    group: "Courses & Assignments",
-  },
-  {
-    icon: CheckSquare,
-    label: "Attendances",
-    href: "/student/attendances",
-    visible: ["student"],
-    group: "Exams & Attendances",
-  },
-  {
-    icon: Calendar,
-    label: "Exams",
-    href: "/student/exams",
-    visible: ["student"],
-    group: "Exams & Attendances",
-  },
-  {
-    icon: CheckSquare,
-    label: "Exam Results",
-    href: "/student/exam-results",
-    visible: ["student"],
-    group: "Exams & Attendances",
+    group: "Academics",
   },
   {
     icon: FileText,

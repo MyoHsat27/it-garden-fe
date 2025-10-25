@@ -24,6 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { User, UserRole } from "@/types/api/user";
+import { handleFormError } from "@/lib/helpers";
 
 const loginSchema = z.object({
   login: z.string().min(1, "Username or email is required"),
@@ -37,7 +38,7 @@ export function LoginForm() {
   const { setAuth } = useAuthStore();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { login: "superadmin@gmail.com", password: "yngWIE500" },
+    defaultValues: { login: "hsatmyo@gmail.com", password: "yngWIE500" },
   });
 
   const loginMutation = useMutation({
@@ -71,11 +72,7 @@ export function LoginForm() {
 
       router.push(`/${role}`);
     },
-    onError: (err: any) => {
-      toast.error(
-        err?.response?.data?.data.message || "Incorrect email or password"
-      );
-    },
+    onError: (err: any) => handleFormError(err),
   });
 
   return (

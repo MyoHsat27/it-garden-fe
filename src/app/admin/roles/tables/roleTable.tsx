@@ -22,7 +22,6 @@ export function RoleTable() {
 
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [showCreateDrawer, setShowCreateDrawer] = useState(false);
-  const [showDetailDrawer, setShowDetailDrawer] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const {
@@ -43,11 +42,6 @@ export function RoleTable() {
   const handlePageSizeChange = (newLimit: number) => {
     setLimit(newLimit);
     setPage(1);
-  };
-
-  const handleView = (Role: Role) => {
-    setSelectedRole(Role);
-    setShowDetailDrawer(true);
   };
 
   const handleEdit = (Role: Role) => {
@@ -105,9 +99,6 @@ export function RoleTable() {
           total={total}
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
-          onView={
-            canPerform("roles-permissions", "view") ? handleView : undefined
-          }
           onEdit={
             canPerform("roles-permissions", "update") ? handleEdit : undefined
           }
@@ -123,14 +114,6 @@ export function RoleTable() {
           role={selectedRole ?? undefined}
           open={showCreateDrawer}
           onOpenChange={setShowCreateDrawer}
-        />
-      )}
-
-      {showDetailDrawer && selectedRole && (
-        <RoleDetailDrawer
-          role={selectedRole}
-          open={showDetailDrawer}
-          onOpenChange={setShowDetailDrawer}
         />
       )}
 

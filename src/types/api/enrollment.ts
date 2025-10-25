@@ -1,4 +1,5 @@
 import { Batch } from "./batch";
+import { Payment } from "./payment";
 import { Student } from "./student";
 
 export enum PaymentStatus {
@@ -36,5 +37,5 @@ export interface Enrollment {
   updatedAt: string;
   student: Student;
   batch: Batch;
-  payment?: Student | null;
+  payment?: Payment | null;
 }

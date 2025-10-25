@@ -47,10 +47,10 @@ export function TimeSlotTable() {
     setPage(1);
   };
 
-  const handleView = (timeSlot: TimeSlot) => {
-    setSelectedTimeSlot(timeSlot);
-    setShowDetailDrawer(true);
-  };
+  // const handleView = (timeSlot: TimeSlot) => {
+  //   setSelectedTimeSlot(timeSlot);
+  //   setShowDetailDrawer(true);
+  // };
 
   const handleEdit = (timeSlot: TimeSlot) => {
     setSelectedTimeSlot(timeSlot);
@@ -107,7 +107,7 @@ export function TimeSlotTable() {
           total={total}
           onPageChange={handlePageChange}
           onPageSizeChange={handlePageSizeChange}
-          onView={canPerform("timeslots", "view") ? handleView : undefined}
+          //  onView={canPerform("timeslots", "view") ? handleView : undefined}
           onEdit={canPerform("timeslots", "update") ? handleEdit : undefined}
           onDelete={
             canPerform("timeslots", "delete") ? handleDelete : undefined
@@ -122,14 +122,14 @@ export function TimeSlotTable() {
           onOpenChange={setShowCreateDrawer}
         />
       )}
-
+      {/* 
       {showDetailDrawer && selectedTimeSlot && (
         <TimeSlotDetailDrawer
           timeSlot={selectedTimeSlot}
           open={showDetailDrawer}
           onOpenChange={setShowDetailDrawer}
         />
-      )}
+      )} */}
 
       {showDeleteModal && selectedTimeSlot && (
         <ConfirmationDialog

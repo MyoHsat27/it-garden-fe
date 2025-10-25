@@ -11,7 +11,6 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="h-screen flex overflow-hidden">
-      {/* SIDEBAR */}
       <aside
         className={`
           fixed inset-y-0 left-0 z-50 w-70 bg-white border-r border-gray-200 p-4 flex flex-col
@@ -20,7 +19,6 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
           md:translate-x-0 md:static md:flex md:flex-col 
         `}
       >
-        {/* Close button for mobile */}
         <div className="flex items-center justify-between mb-6 md:hidden">
           <Image src="/logo.png" alt="logo" width={32} height={32} />
           <button onClick={() => setSidebarOpen(false)}>
@@ -39,7 +37,6 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
         />
       </aside>
 
-      {/* OVERLAY */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/25 z-40 md:hidden"
@@ -47,7 +44,6 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
         />
       )}
 
-      {/* MAIN CONTENT */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar openSidebar={() => setSidebarOpen(true)} />
         <main className="flex-1 overflow-auto bg-gray-50 p-4">{children}</main>

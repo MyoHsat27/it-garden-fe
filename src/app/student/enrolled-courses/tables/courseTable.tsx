@@ -45,7 +45,7 @@ export function CourseTable() {
   return (
     <Card className="py-6 shadow-sm gap-3">
       <CardHeader className="flex justify-between items-center">
-        <CardTitle className="text-xl">Enrolled Courses</CardTitle>
+        <CardTitle className="text-xl">My Courses</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-6">

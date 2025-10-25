@@ -13,12 +13,22 @@ import { useGetFilteredEnrollments } from "@/hooks/useEnrollment";
 import { EnrollmentPaidFormDialog } from "../forms/enrollmentPaidFormDialog";
 import { BanknoteArrowUp } from "lucide-react";
 import { usePermission } from "@/hooks/auth/usePermission";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function EnrollmentTable() {
   const { canPerform } = usePermission();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [paymentStatus, setPaymentStatus] = useState<string | undefined>(
+    undefined
+  );
 
   const [selectedEnrollment, setSelectedEnrollment] =
     useState<Enrollment | null>(null);
@@ -26,14 +36,11 @@ export function EnrollmentTable() {
   const [showPaymentDrawer, setShowPaymentDrawer] = useState(false);
   const [showDetailDrawer, setShowDetailDrawer] = useState(false);
 
-  const {
-    data: enrollmentRes,
-    isLoading,
-    refetch,
-  } = useGetFilteredEnrollments({
+  const { data: enrollmentRes, isLoading } = useGetFilteredEnrollments({
     search,
     page,
     limit,
+    paymentStatus,
   });
   const enrollments = enrollmentRes?.data ?? [];
   const total =
@@ -72,13 +79,32 @@ export function EnrollmentTable() {
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-6">
-          <div className="flex gap-3">
+          <div className="flex justify-start gap-3">
             <Input
               placeholder="Search enrollments"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="max-w-xs"
+              className="w-70"
             />
+            <Select
+              value={paymentStatus ?? ""}
+              onValueChange={(val) => setPaymentStatus(val || undefined)}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Payment Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem key="all" value="all">
+                  All
+                </SelectItem>
+                <SelectItem key="pending" value="pending">
+                  Pending
+                </SelectItem>
+                <SelectItem key="paid" value="paid">
+                  Paid
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 

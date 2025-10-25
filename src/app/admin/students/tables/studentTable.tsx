@@ -22,7 +22,6 @@ export function StudentTable() {
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [showCreateDrawer, setShowCreateDrawer] = useState(false);
   const [showDetailDrawer, setShowDetailDrawer] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const {
     data: studentRes,
@@ -71,10 +70,10 @@ export function StudentTable() {
         <div className="flex justify-between items-center mb-6">
           <div className="flex gap-3">
             <Input
-              placeholder="Search students"
+              placeholder="Search by name, registration no."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="max-w-xs"
+              className="w-70"
             />
           </div>
         </div>

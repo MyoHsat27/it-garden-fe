@@ -50,7 +50,7 @@ export function BatchTable() {
   return (
     <Card className="py-6 shadow-sm gap-3">
       <CardHeader className="flex justify-between items-center">
-        <CardTitle className="text-xl">Batches</CardTitle>
+        <CardTitle className="text-xl">My Classes</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex justify-between items-center mb-6">
