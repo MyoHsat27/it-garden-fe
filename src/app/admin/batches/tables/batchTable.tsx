@@ -108,7 +108,7 @@ export function BatchTable() {
           onPageSizeChange={handlePageSizeChange}
           onView={canPerform("batches", "view") ? handleView : undefined}
           // onEdit={canPerform("batches", "update") ? handleEdit : undefined}
-          onDelete={canPerform("batches", "delete") ? handleDelete : undefined}
+          //  onDelete={canPerform("batches", "delete") ? handleDelete : undefined}
         />
       </CardContent>
 

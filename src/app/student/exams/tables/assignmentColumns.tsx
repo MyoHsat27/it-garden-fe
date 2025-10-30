@@ -1,11 +1,16 @@
 import { Column } from "@/components/common/DataTable";
 import { Badge } from "@/components/ui/badge";
+import { truncateDescription } from "@/lib/helpers";
 import { Assignment } from "@/types/api/assignment";
 
 export const enrollmentColumns: Column<Assignment>[] = [
   { key: "id", label: "ID" },
   { key: "title", label: "Title" },
-  { key: "description", label: "Description" },
+  {
+    key: "description",
+    label: "Description",
+    render: (a: Assignment) => truncateDescription(a.description),
+  },
   {
     key: "course",
     label: "Course",

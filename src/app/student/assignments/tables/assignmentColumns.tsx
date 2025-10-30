@@ -1,10 +1,15 @@
 import { Column } from "@/components/common/DataTable";
+import { truncateDescription } from "@/lib/helpers";
 import { StudentAssignment } from "@/types/api/assignment";
 
 export const enrollmentColumns: Column<StudentAssignment>[] = [
   { key: "id", label: "ID" },
   { key: "title", label: "Title" },
-  { key: "description", label: "Description" },
+  {
+    key: "description",
+    label: "Description",
+    render: (a: StudentAssignment) => truncateDescription(a.description, 3),
+  },
   {
     key: "batch",
     label: "Batch",

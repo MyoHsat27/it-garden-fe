@@ -38,7 +38,7 @@ export function LoginForm() {
   const { setAuth } = useAuthStore();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { login: "hsatmyo@gmail.com", password: "yngWIE500" },
+    defaultValues: { login: "", password: "" },
   });
 
   const loginMutation = useMutation({

@@ -4,7 +4,7 @@ export function capitalize(text?: string) {
   return text ? text.charAt(0).toUpperCase() + text.slice(1).toLowerCase() : "";
 }
 
-export function truncateDescription(text: string, wordLimit = 20): string {
+export function truncateDescription(text: string, wordLimit = 5): string {
   if (!text) return "";
   const words = text.split(/\s+/);
   if (words.length <= wordLimit) return text;

@@ -204,6 +204,26 @@ export function StudentFormDrawer({
           <span className="text-red-500 text-sm">{errors.address.message}</span>
         )}
 
+        <Label htmlFor="gender">Gender</Label>
+        <Controller
+          control={control}
+          name="gender"
+          render={({ field }) => (
+            <Select onValueChange={field.onChange} value={field.value}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select Gender" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={Gender.MALE}>Male</SelectItem>
+                <SelectItem value={Gender.FEMALE}>Female</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        />
+        {errors.gender && (
+          <span className="text-red-500 text-sm">{errors.gender.message}</span>
+        )}
+
         <Label htmlFor="name">Guardian Name</Label>
         <Input
           id="guardianName"
@@ -228,26 +248,6 @@ export function StudentFormDrawer({
           <span className="text-red-500 text-sm">
             {errors.guardianContact.message}
           </span>
-        )}
-
-        <Label htmlFor="gender">Gender</Label>
-        <Controller
-          control={control}
-          name="gender"
-          render={({ field }) => (
-            <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Gender" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={Gender.MALE}>Male</SelectItem>
-                <SelectItem value={Gender.FEMALE}>Female</SelectItem>
-              </SelectContent>
-            </Select>
-          )}
-        />
-        {errors.gender && (
-          <span className="text-red-500 text-sm">{errors.gender.message}</span>
         )}
 
         <Label htmlFor="status">Student Status</Label>
